@@ -23,6 +23,11 @@ private:
     */
     SOCKET mSocket;
 
+    /**
+    * client connected or not
+    */
+    boolean mConnected;
+
 public:
     /**
     * Main constructor
@@ -48,4 +53,9 @@ public:
     * get the client's socket
     */
     SOCKET getSocket() const;
+
+    /**
+    * Close current connection
+    */
+    void close();
 };
