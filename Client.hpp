@@ -58,4 +58,9 @@ public:
     * Close current connection
     */
     void close();
+
+    /**
+    * Send a single message to the server
+    */
+    void sendMessage(string message);
 };

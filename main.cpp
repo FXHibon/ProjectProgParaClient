@@ -8,8 +8,10 @@ int main() {
     client.connectClient();
     cout << "connected" << endl;
     int i = 1;
+    char buffer[10];
     while (i != 0) {
         cout << "0 pour quitter" << endl;
+        client.sendMessage("bonjourcon");
         cin >> i;
     }
     client.close();

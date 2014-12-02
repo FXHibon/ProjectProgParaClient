@@ -21,9 +21,8 @@ void Client::connectClient() {
     this->mSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     // connect to the given address:port
-    if (connect(this->mSocket, (SOCKADDR *) &sin, sizeof(sin)) != 0) {
-        cout << "connection error" << endl;
-        exit(-1);
+    if (connect(this->mSocket, (SOCKADDR *) &sin, sizeof(sin)) == SOCKET_ERROR) {
+        cout << "connection error" << ": " << WSAGetLastError() << endl;
     }
 
     this->mConnected = true;
@@ -44,7 +43,13 @@ SOCKET Client::getSocket() const {
 
 void Client::close() {
     if (this->mConnected) {
+        cout << "closing connections" << endl;
+        this->sendMessage("0");
         closesocket(this->mSocket);
         WSACleanup();
     }
+}
+
+void Client::sendMessage(string message) {
+    send(this->mSocket, message.c_str(), (int) strlen(message.c_str()), 0);
 }
