@@ -17,6 +17,9 @@ void Client::connectClient() {
     sin.sin_family = AF_INET;
     sin.sin_port = htons(this->mPort);
 
+    HANDLE hProcessThread;
+    struct thread_param p;
+
     // create the socket
     this->mSocket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -26,7 +29,38 @@ void Client::connectClient() {
     }
 
     this->mConnected = true;
+
+    p.cl = this;
+    p.soc = this->mSocket;
+
+    hProcessThread = CreateThread(NULL, 0, &Client::threadLauncher, &p, 0, NULL);
+    if (hProcessThread == NULL) {
+        cerr << "CreateThread a échoué avec l'erreur " << GetLastError() << endl;
+    }
     cout << "connection successful" << endl;
+}
+
+DWORD Client::clientThread() {
+    SOCKET soc = this->getSocket();
+    char buffer[50];
+    cout << "thread écoute serveur démarré" << endl;
+    int length = 1;
+    boolean endWhile = false;
+
+    while (length > 0) {
+        length = recv(soc, buffer, 50, 0);
+        if (buffer[0] == '0') {
+            break;
+        }
+        cout << "message reveived, length = " << length << endl;
+        cout << WSAGetLastError() << endl;
+        for (int i = 0; i < length; i++) {
+            cout << buffer[i];
+        }
+    }
+    cout << "thread écoute serveur closed" << endl;
+    closesocket(soc);
+    return 0;
 }
 
 int Client::getPort() const {

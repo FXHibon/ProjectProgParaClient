@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <WinSock2.h>
+#include <windef.h>
 
 /**
 * Main Client class
@@ -27,6 +28,11 @@ private:
     * client connected or not
     */
     boolean mConnected;
+
+    struct thread_param {
+        Client *cl;
+        SOCKET soc;
+    };
 
 public:
     /**
@@ -63,4 +69,12 @@ public:
     * Send a single message to the server
     */
     void sendMessage(string message);
+
+    DWORD clientThread(/*SOCKET soc*/);
+
+    static DWORD WINAPI threadLauncher(void *p) {
+        struct thread_param *Obj = reinterpret_cast<struct thread_param *>(p);
+        Client *c = Obj->cl;
+        return c->clientThread(/*Obj->soc*/);
+    }
 };
