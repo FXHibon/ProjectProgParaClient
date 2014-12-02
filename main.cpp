@@ -1,8 +1,10 @@
 #include <iostream>
+#include "Client.cpp"
 
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
+    Client client = Client("localhost", 8080);
+
     return 0;
 }
