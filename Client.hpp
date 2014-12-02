@@ -37,7 +37,7 @@ public:
     /**
     * Try to connect to the server
     */
-    void connect();
+    void connectClient();
 
     /**
     * get the server's port

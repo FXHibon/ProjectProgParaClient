@@ -8,10 +8,10 @@ Client::Client(string address, int port) {
     this->mAddress = address;
 }
 
-void Client::connect() {
+void Client::connectClient() {
     // init some socket's related data
     WSADATA WSAData;
-    WSAStartup(MAKEWORD(2, 0), &WSAData);
+    WSAStartup(MAKEWORD(2, 2), &WSAData);
     SOCKADDR_IN sin;
     sin.sin_addr.s_addr = inet_addr(this->mAddress.c_str());
     sin.sin_family = AF_INET;
@@ -19,13 +19,15 @@ void Client::connect() {
 
     // create the socket
     this->mSocket = socket(AF_INET, SOCK_STREAM, 0);
-    // bind to the port to be used
-    bind(this->mSocket, (SOCKADDR *) &sin, sizeof(sin));
 
-    // connect the socket to the server
-    // connect(...)
+    // connect to the given address:port
+    if (connect(this->mSocket, (SOCKADDR *) &sin, sizeof(sin)) != 0) {
+        cout << "connection error" << endl;
+        exit(-1);
+    }
+
     this->mConnected = true;
-    cout << "connection successful";
+    cout << "connection successful" << endl;
 }
 
 int Client::getPort() const {
