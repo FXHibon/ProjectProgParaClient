@@ -7,11 +7,11 @@ int main() {
     Client client = Client("127.0.0.1", 3000);
     client.connectClient();
     cout << "connected" << endl;
-    int i = 1;
+    string i = "";
     char buffer[10];
-    while (i != 0) {
+    while (i != "0") {
         cout << "0 pour quitter" << endl;
-        client.sendMessage("bonjourcon");
+        client.sendMessage(i);
         cin >> i;
     }
     client.close();
