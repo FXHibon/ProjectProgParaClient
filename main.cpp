@@ -9,8 +9,7 @@ int main() {
     cout << "connected" << endl;
     string i = "";
     char buffer[10];
-    while (i != "0") {
-        cout << "0 pour quitter" << endl;
+    while (i != "exit") {
         client.sendMessage(i);
         cin >> i;
     }
