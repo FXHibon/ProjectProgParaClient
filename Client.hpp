@@ -34,6 +34,8 @@ private:
         SOCKET soc;
     };
 
+    std::string bufferToString(char* buffer, int bufflen);
+
 public:
     /**
     * Main constructor

@@ -43,22 +43,22 @@ void Client::connectClient() {
 DWORD Client::clientThread() {
     SOCKET soc = this->getSocket();
     char buffer[50];
-    cout << "thread écoute serveur démarré" << endl;
     int length = 1;
-    boolean endWhile = false;
 
-    while (length > 0) {
+    cout << "Connected" << endl;
+
+    while (true) {
         length = recv(soc, buffer, 50, 0);
-        if (buffer[0] == '0') {
-            break;
+        if (length == -1) {
+            continue;
         }
-        cout << "message reveived, length = " << length << endl;
-        cout << WSAGetLastError() << endl;
-        for (int i = 0; i < length; i++) {
-            cout << buffer[i];
-        }
+
+        string message = bufferToString(buffer, length);
+
+        cout << "Message : " << message << endl;
     }
-    cout << "thread écoute serveur closed" << endl;
+
+    cout << "Disconnected" << endl;
     closesocket(soc);
     return 0;
 }
@@ -86,4 +86,9 @@ void Client::close() {
 
 void Client::sendMessage(string message) {
     send(this->mSocket, message.c_str(), (int) strlen(message.c_str()), 0);
+}
+
+std::string Client::bufferToString(char* buffer, int bufflen) {
+    std::string ret(buffer, bufflen);
+    return ret;
 }
