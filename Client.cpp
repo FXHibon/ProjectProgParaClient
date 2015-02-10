@@ -1,5 +1,6 @@
 #include "Client.hpp"
 #include <windows.h>
+#include <sstream>
 
 using namespace std;
 
@@ -42,17 +43,32 @@ void Client::run() {
 }
 
 ClientState Client::handleServerChoice() {
-    string serverIp;
-    int serverPort;
+    string serverIp = "127.0.0.1";
+    int serverPort = 3000;
 
+    string ipTmp;
+    string portTmp;
     cout << endl << "Server IP (127.0.0.1 default):";
-    cin >> serverIp;
+    getline(cin, ipTmp);
 
     cout << endl << "Server port (3000 default):";
-    cin >> serverPort;
+    getline(cin, portTmp);
     cout << endl;
-    this->mAddress = serverIp;
+
+    if (!ipTmp.empty()) {
+        serverIp = ipTmp;
+    }
+
+    if (!portTmp.empty()) {
+        /**
+        * Converting input string into int
+        */
+        istringstream stream(portTmp);
+        stream >> serverPort;
+    }
+
     this->mPort = serverPort;
+    this->mAddress = serverIp;
 
     return ClientState::CONNECTION;
 }
