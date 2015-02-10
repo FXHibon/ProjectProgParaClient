@@ -1,5 +1,4 @@
 #include "Client.hpp"
-#include <windows.h>
 #include <sstream>
 
 using namespace std;

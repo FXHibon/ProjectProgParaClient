@@ -1,7 +1,13 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
+
 #include <iostream>
 #include <string>
 #include <WinSock2.h>
 #include <windef.h>
+
+#include "interfaces/Sender.hpp"
 
 enum ClientState {
     SERVER_CHOICE,
@@ -19,7 +25,7 @@ enum ClientState {
 */
 using namespace std;
 
-class Client {
+class Client : public Sender {
 
 private:
     /**
@@ -94,7 +100,7 @@ private:
     SOCKET getSocket() const;
 
     /**
-    * Send a single message to the server
+    * @Override
     */
     void sendMessage(string message);
 
@@ -158,3 +164,5 @@ public:
     void run();
 
 };
+
+#endif
