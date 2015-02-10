@@ -13,6 +13,7 @@ int main() {
         client.sendMessage(i);
         cin >> i;
     }
+    client.sendMessage("exit");
     client.close();
     return 0;
 }
