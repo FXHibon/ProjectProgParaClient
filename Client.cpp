@@ -29,11 +29,6 @@ void Client::run() {
                 this->mState = this->handleConnected();
                 break;
 
-            case ClientState::WAITING:
-                cout << "WAITING" << endl;
-                this->waitForAnyMessage();
-                break;
-
             case ClientState::GREETINGS:
                 cout << "GREETINGS" << endl;
                 this->handleGreetings();
@@ -41,7 +36,7 @@ void Client::run() {
 
             case ClientState::AUTHENTICATED:
                 cout << "AUTHENTICATED" << endl;
-                this->waitForAnyMessage();
+                this->handleAuthenticated();
                 break;
         }
     }
@@ -149,6 +144,15 @@ ClientState Client::handleGreetings() {
     this->waitForAnyMessage();
 }
 
+ClientState Client::handleAuthenticated() {
+    cout << endl << "Instr:";
+
+    string instr;
+    cin >> instr;
+
+    this->sendMessage(instr);
+}
+
 DWORD Client::clientThread() {
     SOCKET soc = this->getSocket();
     char buffer[50];
@@ -188,14 +192,6 @@ void Client::interpret(string message) {
     }
 
     switch (this->mState) {
-        case ClientState::WAITING:
-            if (instr == "helo") {
-                this->mState = ClientState::GREETINGS;
-            } else {
-                validInstr = false;
-            }
-            break;
-
         case ClientState::GREETINGS:
             if (instr == "ntmy") {
                 this->mState = ClientState::AUTHENTICATED;

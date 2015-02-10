@@ -135,6 +135,8 @@ private:
     */
     ClientState handleGreetings();
 
+    ClientState handleAuthenticated();
+
     /**
     * Interpret incoming message
     * @param message Message from the server
