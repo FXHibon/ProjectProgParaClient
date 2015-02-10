@@ -11,7 +11,7 @@ Client::Client() {
 
 void Client::run() {
 
-    while(true) {
+    while (true) {
         switch (this->mState) {
             case ClientState::SERVER_CHOICE:
                 this->mState = this->handleServerChoice();
@@ -30,15 +30,34 @@ void Client::run() {
                 break;
 
             case ClientState::WAITING:
-                /*
-                * Should be waiting (Thread.sleep() ?)
-                * */
+                cout << "WAITING" << endl;
+                this->waitForAnyMessage();
                 break;
 
             case ClientState::GREETINGS:
+                cout << "GREETINGS" << endl;
                 this->handleGreetings();
                 break;
+
+            case ClientState::AUTHENTICATED:
+                cout << "AUTHENTICATED" << endl;
+                this->waitForAnyMessage();
+                break;
         }
+    }
+}
+
+void Client::waitForMessage(string instruction) {
+    this->lastInstruction = "";
+    while (this->lastInstruction != instruction) {
+        Sleep(1);
+    }
+}
+
+void Client::waitForAnyMessage() {
+    int waitForId = this->lastMessageId + 1;
+    while (this->lastMessageId < waitForId) {
+        Sleep(1);
     }
 }
 
@@ -117,13 +136,17 @@ ClientState Client::handleFailed() {
 
 ClientState Client::handleConnected() {
     cout << "Currently connected to " << this->mAddress << ":" << this->mPort << endl;
-    return ClientState::WAITING;
+    return ClientState::GREETINGS;
 }
 
 ClientState Client::handleGreetings() {
-    /**
-    * Should received HELLO and authenticate ASAP
-    */
+    cout << endl << "Pseudo:";
+
+    string pseudo;
+    cin >> pseudo;
+
+    this->sendMessage("auth" + pseudo);
+    this->waitForAnyMessage();
 }
 
 DWORD Client::clientThread() {
@@ -152,12 +175,44 @@ DWORD Client::clientThread() {
 }
 
 void Client::interpret(string message) {
-    if (message == "hello") {
-        this->mState = ClientState::GREETINGS;
-        /*
-        * Should unlock main thread ! (Thread.notify() ?)
-        * So the run method would go in handleGreeting
-        */
+    bool validInstr = true;
+
+    string instr = message.substr(0, 4);
+    string data = message.substr(4, message.length() - 4);
+
+    cout << endl << "   COMING: " + message << endl;
+    cout << "   instr: " + instr + " data: " + data << endl;
+
+    if (instr == "exit") {
+        this->mState = ClientState::BYE;
+    }
+
+    switch (this->mState) {
+        case ClientState::WAITING:
+            if (instr == "helo") {
+                this->mState = ClientState::GREETINGS;
+            } else {
+                validInstr = false;
+            }
+            break;
+
+        case ClientState::GREETINGS:
+            if (instr == "ntmy") {
+                this->mState = ClientState::AUTHENTICATED;
+            } else if (instr == "argh") {
+                cout << "Please enter a non-stupid thing please. Thanks." << endl;
+            } else {
+                validInstr = false;
+            }
+            break;
+        default:
+            validInstr = false;
+            break;
+    }
+
+    if (validInstr) {
+        this->lastMessageId++;
+        this->lastInstruction = instr;
     }
 }
 
@@ -186,7 +241,7 @@ void Client::sendMessage(string message) {
     send(this->mSocket, message.c_str(), (int) strlen(message.c_str()), 0);
 }
 
-std::string Client::bufferToString(char* buffer, int bufflen) {
+std::string Client::bufferToString(char *buffer, int bufflen) {
     std::string ret(buffer, bufflen);
     return ret;
 }

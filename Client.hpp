@@ -9,7 +9,9 @@ enum ClientState {
     CONNECTED,
     FAILED,
     GREETINGS,
-    WAITING
+    WAITING,
+    AUTHENTICATED,
+    BYE
 };
 
 /**
@@ -52,6 +54,13 @@ private:
     * Is the socket activated?
     */
     bool mSocketActivated = true;
+
+    /**
+    * Last message received ID
+    */
+    int lastMessageId = -1;
+
+    string lastInstruction = "";
 
     struct thread_param {
         Client *cl;
@@ -131,6 +140,9 @@ private:
     * @param message Message from the server
     */
     void interpret(string message);
+
+    void waitForMessage(string instruction);
+    void waitForAnyMessage();
 
 public:
     /**
