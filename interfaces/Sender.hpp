@@ -9,12 +9,10 @@ class Sender {
 
 public:
 
-    Sender();
-
     /**
     * Send a message
     */
-    virtual void sendMessage(std::string message);
+    virtual void sendMessage(std::string message) = 0;
 
 };
 

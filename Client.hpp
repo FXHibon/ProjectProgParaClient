@@ -99,11 +99,6 @@ private:
     */
     SOCKET getSocket() const;
 
-    /**
-    * @Override
-    */
-    void sendMessage(string message);
-
     DWORD clientThread(/*SOCKET soc*/);
 
     /**
@@ -152,6 +147,7 @@ private:
     void waitForMessage(string instruction);
     void waitForAnyMessage();
 
+
 public:
     /**
     * Main constructor
@@ -162,6 +158,11 @@ public:
     * Start the client
     */
     void run();
+
+    /**
+    * @Override
+    */
+    virtual void sendMessage(string message);
 
 };
 
