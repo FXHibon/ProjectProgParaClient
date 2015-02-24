@@ -1,7 +1,7 @@
 #ifndef ABSTRACTSTATE_H
 #define ABSTRACTSTATE_H
 
-#include "../interfaces/Sender.hpp"
+#include "../Client.hpp"
 
 using namespace std;
 
@@ -10,34 +10,13 @@ using namespace std;
 */
 class AbstractState {
 
-private:
-
-    /**
-    * Sender reference
-    */
-    Sender mSender;
-
 public:
-
-/**
-    * Main constructor
-    * @param sender Reference to a sender class
-    * We need it to be able to communicate with the main thread
-    */
-    AbstractState(Sender sender);
 
     /**
     * Core method: process the state
+    * @param Reference to the client (which is the called of State.handle)
     */
-    virtual void handle();
-
-    /**
-    * getter
-    */
-    Sender const &getSender() const {
-        return this->mSender;
-    }
-
+    virtual void handle(Client);
 };
 
 #endif

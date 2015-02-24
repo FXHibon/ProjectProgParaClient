@@ -211,14 +211,6 @@ void Client::interpret(string message) {
     }
 }
 
-int Client::getPort() const {
-    return this->mPort;
-}
-
-string Client::getAddress() const {
-    return this->mAddress;
-}
-
 SOCKET Client::getSocket() const {
     return this->mSocket;
 }

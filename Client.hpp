@@ -7,8 +7,6 @@
 #include <WinSock2.h>
 #include <windef.h>
 
-#include "interfaces/Sender.hpp"
-
 enum ClientState {
     SERVER_CHOICE,
     CONNECTION,
@@ -25,7 +23,7 @@ enum ClientState {
 */
 using namespace std;
 
-class Client : public Sender {
+class Client {
 
 private:
     /**
@@ -147,6 +145,10 @@ private:
     void waitForMessage(string instruction);
     void waitForAnyMessage();
 
+    /**
+    * Send message to the server
+    */
+    virtual void sendMessage(string message);
 
 public:
     /**
@@ -159,11 +161,34 @@ public:
     */
     void run();
 
-    /**
-    * @Override
-    */
-    virtual void sendMessage(string message);
+    /********************************
+    * getters and setters
+    *********************************/
 
+    int getPort() {
+        return mPort;
+    }
+
+    string getAddress() {
+        return mAddress;
+    }
+
+    ClientState getState() {
+        return mState;
+    }
+
+
+    void setPort(int mPort) {
+        Client::mPort = mPort;
+    }
+
+    void setAddress(string &mAddress) {
+        Client::mAddress = mAddress;
+    }
+
+    void setCurrentState(ClientState const &mState) {
+        Client::mState = mState;
+    }
 };
 
 #endif
