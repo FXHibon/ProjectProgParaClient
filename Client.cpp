@@ -1,11 +1,13 @@
 #include "Client.hpp"
 #include <sstream>
 
+#include "state/concretes/ServerChoiceState.hpp"
+
 using namespace std;
 
 Client::Client() {
     cout << "creating client ()" << endl;
-    this->mState = ClientState::SERVER_CHOICE;
+    this->mState = new ServerChoiceState(this);
 }
 
 void Client::run() {

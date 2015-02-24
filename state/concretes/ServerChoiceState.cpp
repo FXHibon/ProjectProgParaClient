@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void ServerChoiceState::handle(Client client) {
+void ServerChoiceState::handle(Interface * client) {
     string serverIp = "127.0.0.1";
     int serverPort = 3000;
 

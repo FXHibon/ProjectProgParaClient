@@ -1,7 +1,7 @@
 #ifndef ABSTRACTSTATE_H
 #define ABSTRACTSTATE_H
 
-#include "../Client.hpp"
+#include "../interfaces/Interface.hpp"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ public:
     * Core method: process the state
     * @param Reference to the client (which is the called of State.handle)
     */
-    virtual void handle(Client);
+    virtual void handle(Interface);
 };
 
 #endif

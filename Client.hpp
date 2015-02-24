@@ -7,6 +7,8 @@
 #include <WinSock2.h>
 #include <windef.h>
 
+#include "state/AbstractState.hpp"
+
 enum ClientState {
     SERVER_CHOICE,
     CONNECTION,
@@ -23,7 +25,7 @@ enum ClientState {
 */
 using namespace std;
 
-class Client {
+class Client : public Interface {
 
 private:
     /**
@@ -47,7 +49,7 @@ private:
     /**
     * Current state
     */
-    ClientState mState;
+    AbstractState mState;
 
     /**
     * Last message received from the server
@@ -189,6 +191,7 @@ public:
     void setCurrentState(ClientState const &mState) {
         Client::mState = mState;
     }
+
 };
 
 #endif

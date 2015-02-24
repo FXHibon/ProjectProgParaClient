@@ -6,7 +6,7 @@
 */
 class ServerChoiceState : public AbstractState {
 public:
-    virtual void handle(Client) = 0;
+    virtual void handle(Interface *) = 0;
 };
 
 #endif
